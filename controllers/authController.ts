@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import Bun from "bun";
 import { z } from "zod";
 import type { Request, Response } from "express";
 import { type IUser } from "../models/User";
@@ -45,8 +44,6 @@ export const register = async (req: Request, res: Response) => {
     console.error("Error in register route", error);
     res.status(500).send({ error: error.message });
   }
-
-
 };
 
 export const login = async (req: Request, res: Response) => {

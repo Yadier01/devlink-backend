@@ -1,6 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-// Define Link schema
 const LinkSchema = new Schema({
   platform: { type: String, required: true },
   url: { type: String, required: true },
@@ -11,7 +10,6 @@ export interface ILink extends Document {
   url: string;
 }
 
-// Define Profile schema
 const ProfileSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
@@ -28,7 +26,6 @@ export interface IProfile extends Document {
   links: ILink[];
 }
 
-// Define User schema
 const UserSchema = new Schema({
   name: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -41,7 +38,6 @@ export interface IUser extends Document {
   profiles: IProfile[];
 }
 
-// Create models
 export const Link = mongoose.model<ILink>("Link", LinkSchema);
 export const Profile = mongoose.model<IProfile>("Profile", ProfileSchema);
 export const User = mongoose.model<IUser>("User", UserSchema);
