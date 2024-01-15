@@ -73,5 +73,6 @@ export const login = async (req: Request, res: Response) => {
   } catch (err: any) {
     console.error("Error in login route", err);
     res.status(500).send({ error: err.message });
+
   }
 };
