@@ -45,6 +45,8 @@ export const register = async (req: Request, res: Response) => {
     console.error("Error in register route", error);
     res.status(500).send({ error: error.message });
   }
+
+
 };
 
 export const login = async (req: Request, res: Response) => {
