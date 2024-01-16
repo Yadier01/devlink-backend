@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import { User } from "../schemas/allSchemas.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 const signupSchema = z.object({
   name: z.string().min(3),
   password: z.string().min(6),
