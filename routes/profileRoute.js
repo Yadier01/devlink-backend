@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.post("/", createProfile);
 router.get("/", getProfiles);
-router.patch("/", editProfile);
+router.patch("/", createProfile);
 
 export default router;
