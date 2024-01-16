@@ -38,19 +38,27 @@ export const createProfile = [
         return;
       }
 
-      const newProfile = new Profile({
+      const profileData = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         userId: decoded.userId,
         links: req.body.links,
-      });
+      };
 
-      await newProfile.save();
+      const profile = await Profile.findOneAndUpdate(
+        { userId: decoded.userId },
+        profileData,
+        { upsert: true, new: true, runValidators: true }
+      );
 
-      res.json({ message: "Profile created successfully" });
+      if (!profile) {
+        res.json({ message: "Profile created successfully", profile });
+      } else {
+        res.json({ message: "Profile updated successfully", profile });
+      }
     } catch (error) {
-      console.error("Error creating profile and links", error);
+      console.error("Error creating or updating profile and links", error);
       res.status(500).send({ error: error.message });
     }
   },
@@ -86,42 +94,3 @@ export const getProfiles = async (req, res) => {
     res.status(400).send({ error: "Either name or token is required" });
   }
 };
-
-export const editProfile = [
-  validateBody(createProfileSchema),
-  async (req, res) => {
-    try {
-      let decoded;
-      try {
-        decoded = jwt.verify(req.body.token, process.env.JWT_SECRET);
-      } catch (error) {
-        res.status(400).send({ error: "Invalid token" });
-        return;
-      }
-
-      const profile = await Profile.findOne({ userId: decoded.userId });
-
-      if (!profile) {
-        res.status(404).send({ error: "Profile not found" });
-        return;
-      }
-
-      const { firstName, lastName, email, links } = req.body;
-
-      if (firstName) profile.firstName = firstName;
-      if (lastName) profile.lastName = lastName;
-      if (email) profile.email = email;
-
-      if (links) {
-        profile.links = links.filter((link) => link.platform && link.url);
-      }
-
-      await profile.save();
-
-      res.status(200).send({ message: "Profile updated successfully" });
-    } catch (error) {
-      console.error("Error updating profile", error);
-      res.status(500).send({ error: error.message });
-    }
-  },
-];
