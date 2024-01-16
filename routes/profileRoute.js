@@ -1,7 +1,6 @@
 import express from "express";
 import {
   createProfile,
-  editProfile,
   getProfiles,
 } from "../controllers/profileController.js";
 
