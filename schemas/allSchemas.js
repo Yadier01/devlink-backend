@@ -8,7 +8,6 @@ const LinkSchema = new Schema({
 const ProfileSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true },
   userId: { type: String, required: true },
   links: [LinkSchema],
 });
