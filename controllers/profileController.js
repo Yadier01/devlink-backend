@@ -10,9 +10,9 @@ const linkSchema = z.object({
 });
 
 const createProfileSchema = z.object({
-  firstName: z.string().min(3),
-  lastName: z.string().min(3),
-  email: z.string().email(),
+  firstName: z.string().min(3).optional(),
+  lastName: z.string().min(3).optional(),
+  email: z.string().email().optional(),
   links: z.array(linkSchema).optional(),
   token: z.string(),
 });
