@@ -3,7 +3,7 @@ import {
   createProfile,
   editProfile,
   getProfiles,
-} from "../controllers/profileController";
+} from "../controllers/profileController.js";
 
 const router = express.Router();
 

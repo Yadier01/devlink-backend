@@ -1,8 +1,7 @@
-import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { z } from "zod";
 import dotenv from "dotenv";
-import { Profile, type IProfile, User } from "../schemas/allSchemas";
+import { Profile, User } from "../schemas/allSchemas.js";
 dotenv.config();
 
 const linkSchema = z.object({
@@ -18,32 +17,28 @@ const createProfileSchema = z.object({
   token: z.string(),
 });
 
-const validateBody =
-  (schema: z.ZodSchema<any>) =>
-  (req: Request, res: Response, next: NextFunction) => {
-    try {
-      req.body = schema.parse(req.body);
-      next();
-    } catch (error: any) {
-      res.status(400).send({ error: error.message });
-    }
-  };
+const validateBody = (schema) => (req, res, next) => {
+  try {
+    req.body = schema.parse(req.body);
+    next();
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+};
 
 export const createProfile = [
   validateBody(createProfileSchema),
-  async (req: Request, res: Response) => {
+  async (req, res) => {
     try {
       let decoded;
       try {
-        decoded = jwt.verify(req.body.token, process.env.JWT_SECRET!) as {
-          userId: string;
-        };
+        decoded = jwt.verify(req.body.token, process.env.JWT_SECRET);
       } catch (error) {
         res.status(400).send({ error: "Invalid token" });
         return;
       }
 
-      const newProfile: IProfile = new Profile({
+      const newProfile = new Profile({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
@@ -54,14 +49,14 @@ export const createProfile = [
       await newProfile.save();
 
       res.json({ message: "Profile created successfully" });
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error creating profile and links", error);
       res.status(500).send({ error: error.message });
     }
   },
 ];
 
-export const getProfiles = async (req: Request, res: Response) => {
+export const getProfiles = async (req, res) => {
   const { name, token } = req.query;
 
   if (typeof name === "string") {
@@ -78,9 +73,7 @@ export const getProfiles = async (req: Request, res: Response) => {
   } else if (typeof token === "string") {
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
-        userId: string;
-      };
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
     } catch (error) {
       res.status(400).send({ error: "Invalid token" });
       return;
@@ -96,13 +89,11 @@ export const getProfiles = async (req: Request, res: Response) => {
 
 export const editProfile = [
   validateBody(createProfileSchema),
-  async (req: Request, res: Response) => {
+  async (req, res) => {
     try {
       let decoded;
       try {
-        decoded = jwt.verify(req.body.token, process.env.JWT_SECRET!) as {
-          userId: string;
-        };
+        decoded = jwt.verify(req.body.token, process.env.JWT_SECRET);
       } catch (error) {
         res.status(400).send({ error: "Invalid token" });
         return;
@@ -122,13 +113,13 @@ export const editProfile = [
       if (email) profile.email = email;
 
       if (links) {
-        profile.links = links.filter((link: any) => link.platform && link.url);
+        profile.links = links.filter((link) => link.platform && link.url);
       }
 
       await profile.save();
 
       res.status(200).send({ message: "Profile updated successfully" });
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error updating profile", error);
       res.status(500).send({ error: error.message });
     }

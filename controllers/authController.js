@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
 import { z } from "zod";
-import type { Request, Response } from "express";
-import { type IUser } from "../models/User";
-import { User } from "../schemas/allSchemas";
-
+import { User } from "../schemas/allSchemas.js";
+import bcrypt from "bcrypt";
 const signupSchema = z.object({
   name: z.string().min(3),
   password: z.string().min(6),
@@ -14,7 +12,7 @@ const loginSchema = z.object({
   password: z.string(),
 });
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req, res) => {
   try {
     const { name, password } = signupSchema.parse(req.body);
 
@@ -25,12 +23,9 @@ export const register = async (req: Request, res: Response) => {
       return;
     }
 
-    const bcryptHash = await Bun.password.hash(password, {
-      algorithm: "bcrypt",
-      cost: 12,
-    });
+    const bcryptHash = await bcrypt.hash(password, 13);
 
-    const user: IUser = new User({
+    const user = new User({
       name,
       password: bcryptHash,
     });
@@ -40,13 +35,13 @@ export const register = async (req: Request, res: Response) => {
     res
       .status(201)
       .json({ status: 201, message: "User registered successfully" });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error in register route", error);
     res.status(500).send({ error: error.message });
   }
 };
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req, res) => {
   try {
     const { name, password } = loginSchema.parse(req.body);
 
@@ -57,22 +52,21 @@ export const login = async (req: Request, res: Response) => {
       return;
     }
 
-    const validPassword = await Bun.password.verify(password, user.password);
+    const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       res.status(400).send({ error: "Invalid credentials" });
       return;
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
     res.json({
       message: "success",
       token,
       name: user.name,
     });
-  } catch (err: any) {
+  } catch (err) {
     console.error("Error in login route", err);
     res.status(500).send({ error: err.message });
-
   }
 };

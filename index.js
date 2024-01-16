@@ -2,15 +2,15 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cors from "cors";
-import authRoute from "./routes/authRoute";
-import profileRoute from "./routes/profileRoute";
+import authRoute from "./routes/authRoute.js";
+import profileRoute from "./routes/profileRoute.js";
 
 dotenv.config({ path: ".env" });
 
 const app = express();
 
 mongoose
-  .connect(process.env.DATABASE_URL!)
+  .connect(process.env.DATABASE_URL)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
 

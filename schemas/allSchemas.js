@@ -5,11 +5,6 @@ const LinkSchema = new Schema({
   url: { type: String, required: true },
 });
 
-export interface ILink extends Document {
-  platform: string;
-  url: string;
-}
-
 const ProfileSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
@@ -18,26 +13,12 @@ const ProfileSchema = new Schema({
   links: [LinkSchema],
 });
 
-export interface IProfile extends Document {
-  firstName: string;
-  lastName: string;
-  email: string;
-  userId: string;
-  links: ILink[];
-}
-
 const UserSchema = new Schema({
   name: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   profiles: [{ type: Schema.Types.ObjectId, ref: "Profile" }],
 });
 
-export interface IUser extends Document {
-  name: string;
-  password: string;
-  profiles: IProfile[];
-}
-
-export const Link = mongoose.model<ILink>("Link", LinkSchema);
-export const Profile = mongoose.model<IProfile>("Profile", ProfileSchema);
-export const User = mongoose.model<IUser>("User", UserSchema);
+export const Link = mongoose.model("Link", LinkSchema);
+export const Profile = mongoose.model("Profile", ProfileSchema);
+export const User = mongoose.model("User", UserSchema);
