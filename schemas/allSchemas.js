@@ -11,6 +11,7 @@ const ProfileSchema = new Schema({
   email: { type: String },
   userId: { type: String, required: true, unique: true },
   links: [LinkSchema],
+  image: { type: String },
 });
 
 const UserSchema = new Schema({
