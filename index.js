@@ -13,7 +13,7 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => {
     console.error("Could not connect to MongoDB", err);
-    process.exit(1); // Exit the process with a failure code
+    process.exit(1);
   });
 app.use(cors());
 app.use(express.json());
