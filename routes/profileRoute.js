@@ -6,6 +6,12 @@ import {
 import path from "path";
 import multer from "multer";
 
+
+const router = express.Router();
+
+const upload = multer({ storage: storage });
+
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'images')
@@ -16,10 +22,6 @@ const storage = multer.diskStorage({
   }
 
 })
-
-const upload = multer({ storage: storage });
-const router = express.Router();
-
 router.post("/", upload.single("image"), createProfile);
 router.get("/", getProfiles);
 router.patch("/", upload.single("image"), createProfile);
