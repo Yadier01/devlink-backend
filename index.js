@@ -8,7 +8,6 @@ import profileRoute from "./routes/profileRoute.js";
 dotenv.config({ path: ".env" });
 
 const app = express();
-
 mongoose
   .connect(process.env.DATABASE_URL)
   .then(() => console.log("Connected to MongoDB"))

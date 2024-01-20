@@ -3,7 +3,7 @@ import {
   createProfile,
   getProfiles,
 } from "../controllers/profileController.js";
-
+import path from "path";
 import multer from "multer";
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     console.log(file)
-    cb(null, Date, now() + path.extname(file.originalname))
+    cb(null, Date.now() + path.extname(file.originalname))
   }
 
 })
