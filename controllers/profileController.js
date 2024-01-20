@@ -33,20 +33,24 @@ const verifyToken = (token) => {
   }
 };
 
-const createProfileData = (req, decoded) => {
+
+function createProfileData(req, decoded) {
   const { firstName, lastName, email, links } = req.body;
+
   const profileData = {
     userId: decoded.userId,
     ...(firstName && { firstName }),
     ...(lastName && { lastName }),
     ...(email && { email }),
     ...(links && { links }),
+    image: { image: req.file.path },
   };
 
   return profileData;
 };
 export const createProfile = [
   validateBody(createProfileSchema),
+  upload.single('image'),
   async (req, res) => {
     try {
       const decoded = verifyToken(req.body.token);
