@@ -10,22 +10,22 @@ import multer from "multer";
 const router = express.Router();
 
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'images')
-  },
-  filename: (req, file, cb) => {
-    console.log(file)
-    cb(null, Date.now() + path.extname(file.originalname))
-  }
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'images')
+//   },
+//   filename: (req, file, cb) => {
+//     console.log(file)
+//     cb(null, Date.now() + path.extname(file.originalname))
+//   }
 
-})
+// })
 
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
 
-router.post("/", upload.single("image"), createProfile);
+router.post("/", createProfile);
 router.get("/", getProfiles);
-router.patch("/", upload.single("image"), createProfile);
+router.patch("/", createProfile);
 
 export default router;
