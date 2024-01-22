@@ -33,7 +33,6 @@ const verifyToken = (token) => {
   }
 };
 
-
 function createProfileData(req, decoded) {
   const { firstName, lastName, email, links } = req.body;
 
@@ -47,10 +46,10 @@ function createProfileData(req, decoded) {
   };
 
   return profileData;
-};
+}
 export const createProfile = [
   validateBody(createProfileSchema),
-  upload.single('image'),
+  // upload.single('image'),
   async (req, res) => {
     try {
       const decoded = verifyToken(req.body.token);
@@ -59,7 +58,7 @@ export const createProfile = [
       const profile = await Profile.findOneAndUpdate(
         { userId: decoded.userId },
         profileData,
-        { upsert: true, new: true, runValidators: true }
+        { upsert: true, new: true, runValidators: true },
       );
 
       if (!profile) {
