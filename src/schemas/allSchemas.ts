@@ -4,9 +4,6 @@ const LinkSchema = new Schema({
   platform: { type: String, required: true },
   url: { type: String, required: true },
 });
-const imageSchema = new Schema({
-  image: { type: String }, // make this field required
-});
 
 const ProfileSchema = new Schema({
   firstName: { type: String },
@@ -14,13 +11,13 @@ const ProfileSchema = new Schema({
   email: { type: String },
   userId: { type: String, required: true, unique: true },
   links: [LinkSchema],
-  image: imageSchema, // this field now expects an object with an 'image' property
-});;
+  image: { type: String },
+});
 
 const UserSchema = new Schema({
   name: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  profiles: [{ type: Schema.Types.ObjectId, ref: "Profile" }],
+  profile: { type: Schema.Types.ObjectId, ref: "Profile" },
 });
 
 export const Link = mongoose.model("Link", LinkSchema);

@@ -36,6 +36,7 @@ export const register = async (req, res) => {
       .status(201)
       .json({ status: 201, message: "User registered successfully" });
   } catch (error) {
+    // tslint:disable-next-line:no-console
     console.error("Error in register route", error);
     res.status(500).send({ error: error.message });
   }
@@ -58,7 +59,7 @@ export const login = async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!);
 
     res.json({
       message: "success",
@@ -66,6 +67,7 @@ export const login = async (req, res) => {
       name: user.name,
     });
   } catch (err) {
+    // tslint:disable-next-line:no-console
     console.error("Error in login route", err);
     res.status(500).send({ error: err.message });
   }
