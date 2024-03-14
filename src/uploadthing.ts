@@ -3,16 +3,12 @@ import { createUploadthing, type FileRouter } from "uploadthing/express";
 const f = createUploadthing();
 
 export const uploadRouter = {
-  videoAndImage: f({
+  image: f({
     image: {
       maxFileSize: "4MB",
-      maxFileCount: 4,
-    },
-    video: {
-      maxFileSize: "16MB",
+      maxFileCount: 1,
     },
   }).onUploadComplete((data) => {
-    // tslint:disable-next-line:no-console
     console.log("upload completed", data);
   }),
 } satisfies FileRouter;

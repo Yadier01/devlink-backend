@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import cors from "cors";
 import authRoute from "./routes/authRoute.js";
 import profileRoute from "./routes/profileRoute.js";
+import { createRouteHandler } from "uploadthing/express";
+import { uploadRouter } from "./uploadthing";
 
 dotenv.config({ path: ".env" });
 
@@ -21,6 +23,12 @@ mongoose
 app.use(cors());
 app.use(express.json());
 
+app.use(
+  "/api/uploadthing",
+  createRouteHandler({
+    router: uploadRouter,
+  }),
+);
 app.use("/auth", authRoute);
 app.use("/", profileRoute);
 

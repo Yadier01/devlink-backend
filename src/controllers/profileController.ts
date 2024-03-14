@@ -3,6 +3,7 @@ import { verifyToken } from "../util/verifyToken.js";
 import { z } from "zod";
 import dotenv from "dotenv";
 import { Profile, User } from "../schemas/allSchemas.js";
+import { JwtPayload } from "jsonwebtoken";
 dotenv.config();
 
 const linkSchema = z.object({ url: z.string().url(), platform: z.string() });
@@ -38,7 +39,7 @@ function createProfileData(req, decoded) {
 
 export const createProfile = async (req, res) => {
   try {
-    const decoded = verifyToken(req.headers.token);
+    const decoded = verifyToken(req.headers.token) as JwtPayload;
     const profileData = createProfileData(req, decoded);
 
     const profile = await Profile.findOneAndUpdate(
@@ -57,7 +58,6 @@ export const createProfile = async (req, res) => {
       res.json({ message: "Profile updated successfully", profile });
     }
   } catch (error) {
-    // tslint:disable-next-line:no-console
     console.error("Error creating or updating profile and links", error);
     res.status(500).send({ error: error.message });
   }
@@ -79,7 +79,7 @@ export const getProfiles = async (req, res) => {
       return res.status(200).json(profiles);
     } else if (token) {
       // else profile by token
-      const decoded = decodeToken(token);
+      const decoded = decodeToken(token) as JwtPayload;
       const profiles = await Profile.find({ userId: decoded.userId });
 
       return res.status(200).json(profiles);
